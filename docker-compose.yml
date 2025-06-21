@@ -1,0 +1,68 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "8501:8501"
+    volumes:
+      - ./frontend:/app
+    networks:
+      - rag_network
+
+  backend-ui:
+    build: ./backend-ui
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./backend-ui:/app
+    networks:
+      - rag_network
+
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend:/app
+      - data:/data
+    depends_on:
+      - db
+      - opensearch
+    networks:
+      - rag_network
+
+  db:
+    image: postgres:13
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    environment:
+      - POSTGRES_DB=rag_db
+      - POSTGRES_USER=rag_user
+      - POSTGRES_PASSWORD=rag_password
+    ports:
+      - "5432:5432"
+    networks:
+      - rag_network
+
+  opensearch:
+    image: opensearchproject/opensearch:2
+    environment:
+      - discovery.type=single-node
+      - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+    ports:
+      - "9200:9200"
+      - "9600:9600"
+    volumes:
+      - opensearch_data:/usr/share/opensearch/data
+    networks:
+      - rag_network
+
+volumes:
+  postgres_data:
+  opensearch_data:
+  data:
+
+networks:
+  rag_network:
+    driver: bridge
