@@ -192,3 +192,17 @@ cython_debug/
 #  refer to https://docs.cursor.com/context/ignore-files
 .cursorignore
 .cursorindexingignore
+
+# Node.js
+node_modules/
+npm-debug.log
+yarn-error.log
+yarn.lock
+pnpm-lock.yaml
+package-lock.json
+
+# macOS
+.DS_Store
+
+# Data
+data/
