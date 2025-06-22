@@ -12,7 +12,7 @@ from django.core.files.storage import default_storage
 from django.conf import settings
 from langchain_openai import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain
-from langchain.callbacks import get_openai_callback
+from langchain_community.callbacks.manager import get_openai_callback
 
 class FileUploadView(APIView):
     parser_classes = (MultiPartParser, FormParser)
