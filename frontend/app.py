@@ -34,7 +34,7 @@ with st.sidebar:
     st.subheader("Upload a file")
     uploaded_file = st.file_uploader("Choose a file", type=["docx", "txt", "md", "xlsx"])
     if uploaded_file is not None:
-        files = {"file": uploaded_file.getvalue()}
+        files = {"file": (uploaded_file.name, uploaded_file.getvalue())}
         response = requests.post("http://backend:8000/api/upload/", files=files)
         if response.status_code == 201:
             st.success("File uploaded successfully!")
@@ -59,5 +59,10 @@ if st.session_state.session_id:
 
 if prompt := st.chat_input("What is up?"):
     post_message(st.session_state.session_id, "user", prompt)
+    st.session_state.messages = get_messages(st.session_state.session_id)
+    st.rerun()
+    
+    # The assistant's response will be added by the backend,
+    # so we just need to refresh the messages.
     st.session_state.messages = get_messages(st.session_state.session_id)
     st.rerun()

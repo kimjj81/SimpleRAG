@@ -1,3 +1,6 @@
 from django.contrib import admin
+from .models import File, ChatSession, ChatMessage
 
-# Register your models here.
+admin.site.register(File)
+admin.site.register(ChatSession)
+admin.site.register(ChatMessage)

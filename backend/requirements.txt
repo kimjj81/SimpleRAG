@@ -1,3 +1,12 @@
 Django
 djangorestframework
 psycopg2-binary
+django-cors-headers
+langchain
+langchain-community
+langchain-openai
+tiktoken
+pypdf
+python-docx
+openpyxl
+opensearch-py

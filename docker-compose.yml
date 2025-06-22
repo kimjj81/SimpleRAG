@@ -16,11 +16,14 @@ services:
       - "3000:3000"
     volumes:
       - ./backend-ui:/app
+      - /app/node_modules
     networks:
       - rag_network
 
   backend:
     build: ./backend
+    env_file:
+      - .env
     ports:
       - "8000:8000"
     volumes:
@@ -50,6 +53,7 @@ services:
     environment:
       - discovery.type=single-node
       - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
+      - DISABLE_SECURITY_PLUGIN=true
     ports:
       - "9200:9200"
       - "9600:9600"
