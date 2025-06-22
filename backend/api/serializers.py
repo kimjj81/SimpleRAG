@@ -10,7 +10,7 @@ class FileSerializer(serializers.ModelSerializer):
 class ChatMessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = ChatMessage
-        fields = "__all__"
+        fields = ['id', 'session', 'role', 'content', 'created_at', 'input_tokens', 'output_tokens']
 
 class ChatSessionSerializer(serializers.ModelSerializer):
     messages = ChatMessageSerializer(many=True, read_only=True)

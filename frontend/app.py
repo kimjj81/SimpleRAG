@@ -56,6 +56,10 @@ if st.session_state.session_id:
     for message in st.session_state.messages:
         with st.chat_message(message["role"]):
             st.markdown(message["content"])
+            if message.get("input_tokens", 0) > 0:
+                st.markdown(f"**Input Tokens:** {message['input_tokens']}")
+            if message.get("output_tokens", 0) > 0:
+                st.markdown(f"**Output Tokens:** {message['output_tokens']}")
 
 if prompt := st.chat_input("What is up?"):
     post_message(st.session_state.session_id, "user", prompt)

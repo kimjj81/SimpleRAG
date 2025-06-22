@@ -12,6 +12,7 @@ from django.core.files.storage import default_storage
 from django.conf import settings
 from langchain_openai import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain
+from langchain.callbacks import get_openai_callback
 
 class FileUploadView(APIView):
     parser_classes = (MultiPartParser, FormParser)
@@ -66,12 +67,15 @@ class ChatMessageListCreateView(generics.ListCreateAPIView):
             else:
                 chat_history[-1] = (chat_history[-1][0], message.content)
 
-        result = qa({"question": user_message.content, "chat_history": chat_history})
+        with get_openai_callback() as cb:
+            result = qa({"question": user_message.content, "chat_history": chat_history})
         
         assistant_message = ChatMessage.objects.create(
             session=session,
             role='assistant',
-            content=result['answer']
+            content=result['answer'],
+            input_tokens=cb.prompt_tokens,
+            output_tokens=cb.completion_tokens
         )
 
 class UserListView(generics.ListAPIView):
