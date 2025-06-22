@@ -1,5 +1,7 @@
 # SimpleRAG
 
+- [Minikube와 ArgoCD를 이용한 로컬 Kubernetes 배포 가이드](./k8s-guide.md)
+
 This is a simple RAG (Retrieval-Augmented Generation) application. It uses a Streamlit frontend for user interaction, a Django backend for business logic, a PostgreSQL database for data storage, and OpenSearch for indexing and searching documents.
 
 ## Architecture

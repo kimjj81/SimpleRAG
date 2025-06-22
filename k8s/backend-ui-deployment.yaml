@@ -1,0 +1,20 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: backend-ui
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: backend-ui
+  template:
+    metadata:
+      labels:
+        app: backend-ui
+    spec:
+      containers:
+      - name: backend-ui
+        image: simple-rag-backend-ui:latest
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3000
