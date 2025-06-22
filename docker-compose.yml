@@ -47,7 +47,7 @@ services:
       - rag_network
 
   opensearch:
-    image: opensearchproject/opensearch:3.0.1
+    image: opensearchproject/opensearch:3.0.0
     environment:
       - cluster.name=opensearch-cluster
       - node.name=opensearch-node
@@ -74,7 +74,7 @@ services:
       - rag_network
 
   opensearch-dashboards:
-    image: opensearchproject/opensearch-dashboards:3.0.1
+    image: opensearchproject/opensearch-dashboards:3.0.0
     ports:
       - "5601:5601"
     environment:
