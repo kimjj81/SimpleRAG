@@ -27,10 +27,10 @@ The application is composed of several services, all managed by Docker Compose:
     git clone https://github.com/your-username/SimpleRAG.git
     cd SimpleRAG
     ```
-2.  Create a `.env` file in the root directory of the project and add your OpenAI API key and a secure password for OpenSearch:
+2.  Create a `.env` file in the root directory of the project and add your OpenAI API key and a secure password for OpenSearch. The OpenSearch password must be at least 8 characters long and contain at least one uppercase letter, one lowercase letter, one digit, and one special character.
     ```
     OPENAI_API_KEY=your-api-key
-    OPENSEARCH_INITIAL_ADMIN_PASSWORD=your-secure-password
+    OPENSEARCH_INITIAL_ADMIN_PASSWORD=YourSecurePassword1!
     ```
 3.  Build and run the services using Docker Compose:
     ```bash
