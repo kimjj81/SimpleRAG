@@ -207,3 +207,7 @@ package-lock.json
 
 # Data
 data/
+media/
+
+# Next.js
+backend-ui/.next/
