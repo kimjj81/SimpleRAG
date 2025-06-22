@@ -35,12 +35,17 @@ def chunk_document(document):
     return text_splitter.split_documents(document)
 
 def get_opensearch_vector_store():
-    opensearch_url = "http://opensearch:9200"
+    opensearch_url = "https://admin:{}@opensearch:9200".format(os.environ.get("OPENSEARCH_INITIAL_ADMIN_PASSWORD"))
     embeddings = OpenAIEmbeddings()
     return OpenSearchVectorSearch(
         opensearch_url=opensearch_url,
         index_name="rag-index",
         embedding_function=embeddings,
+        http_auth=("admin", os.environ.get("OPENSEARCH_INITIAL_ADMIN_PASSWORD")),
+        use_ssl=True,
+        verify_certs=False,
+        ssl_assert_hostname=False,
+        ssl_show_warn=False,
     )
 
 def embed_and_store(chunks):
