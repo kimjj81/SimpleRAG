@@ -52,6 +52,7 @@ services:
       - discovery.type=single-node
       - "OPENSEARCH_JAVA_OPTS=-Xms512m -Xmx512m"
       - "DISABLE_SECURITY_PLUGIN=false"
+      - "DISABLE_INSTALL_DEMO_CONFIG=false"
     env_file:
       - .env
     ports:
@@ -70,6 +71,7 @@ services:
       - OPENSEARCH_HOSTS=["https://opensearch:9200"]
       - OPENSEARCH_USERNAME=admin
       - OPENSEARCH_PASSWORD=${OPENSEARCH_INITIAL_ADMIN_PASSWORD}
+      - "OPENSEARCH_SSL_VERIFICATIONMODE=none"
     depends_on:
       - opensearch
     networks:
