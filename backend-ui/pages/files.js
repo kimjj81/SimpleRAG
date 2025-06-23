@@ -39,7 +39,7 @@ export default function Files() {
     <div>
       <h1>File Management</h1>
       <div style={{ marginBottom: '1rem' }}>
-        <input type="file" id="fileInput" accept=".txt,.pdf,.docx,.md" />
+        <input type="file" id="fileInput" accept=".txt,.pdf,application/pdf,.doc,application/msword,.docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document,.md" />
         <button onClick={handleFileUpload}>Upload File</button>
       </div>
       <table>

@@ -32,7 +32,7 @@ with st.sidebar:
         st.rerun()
 
     st.subheader("Upload a file")
-    uploaded_file = st.file_uploader("Choose a file", type=["docx", "txt", "md", "xlsx"])
+    uploaded_file = st.file_uploader("Choose a file", type=["docx", "txt", "md", "xlsx", "pdf", "doc"])
     if uploaded_file is not None:
         files = {"file": (uploaded_file.name, uploaded_file.getvalue())}
         response = requests.post("http://backend:8000/api/upload/", files=files)
