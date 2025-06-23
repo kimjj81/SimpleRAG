@@ -11,9 +11,37 @@ export default function Files() {
       });
   }, []);
 
+  const handleFileUpload = () => {
+    const fileInput = document.querySelector('#fileInput');
+    const file = fileInput.files[0];
+    
+    if (!file) return;
+    
+    const formData = new FormData();
+    formData.append('file', file);
+    
+    fetch('http://localhost:8000/api/files/upload/', {
+      method: 'POST',
+      body: formData,
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        alert('File uploaded successfully');
+        window.location.reload();
+      })
+      .catch((err) => {
+        alert('File upload failed');
+        console.error(err);
+      });
+  };
+
   return (
     <div>
       <h1>File Management</h1>
+      <div style={{ marginBottom: '1rem' }}>
+        <input type="file" id="fileInput" accept=".txt,.pdf,.docx,.md" />
+        <button onClick={handleFileUpload}>Upload File</button>
+      </div>
       <table>
         <thead>
           <tr>

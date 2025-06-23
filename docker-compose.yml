@@ -11,7 +11,7 @@ services:
   backend-ui:
     build: ./backend-ui
     ports:
-      - "3000:3000"
+      - "3001:3000"
     volumes:
       - ./backend-ui:/app
       - /app/node_modules
