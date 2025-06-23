@@ -66,6 +66,33 @@ minikube start
         kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d
         ```
 
+    > **참고:** 위 명령어는 Kubernetes 클러스터 내에 `Secret`으로 저장된 초기 비밀번호를 조회하여 터미널에 출력하는 명령어입니다. 별도의 `.data` 파일을 생성할 필요 없이, 터미널에 출력된 비밀번호를 복사하여 사용하면 됩니다.
+
+    ---
+    
+    #### **로그인이 계속 실패할 경우 (비밀번호 재설정)**
+    
+    만약 위 명령어로 얻은 비밀번호로 로그인이 계속 실패한다면, 로그인 시도 횟수 초과로 계정이 잠겼거나 다른 문제가 발생했을 수 있습니다. 다음 절차에 따라 비밀번호를 완전히 재설정할 수 있습니다.
+    
+    1.  **기존 비밀번호 정보 삭제:**
+        ArgoCD의 `admin` 계정 비밀번호가 저장된 `Secret`을 초기화합니다.
+        ```bash
+        kubectl -n argocd patch secret argocd-secret --type=json -p='[{"op": "remove", "path": "/data/admin.password"}, {"op": "remove", "path": "/data/admin.passwordMtime"}]'
+        ```
+    
+    2.  **ArgoCD 서버 재시작:**
+        ArgoCD 서버 파드를 삭제하여 Kubernetes가 자동으로 재시작하도록 합니다. 이 과정에서 새로운 비밀번호가 생성됩니다.
+        ```bash
+        kubectl delete pod -n argocd -l app.kubernetes.io/name=argocd-server
+        ```
+    
+    3.  **새로운 비밀번호 확인:**
+        서버가 재시작된 후(약 1분 정도 소요), **아래 명령어를 다시 실행하여 완전히 새롭게 생성된 비밀번호를 확인**하고 로그인합니다.
+        ```bash
+        kubectl -n argocd get secret argocd-initial-admin-secret -o jsonpath="{.data.password}" | base64 -d; echo
+        ```
+    ---
+
 ## 4. 애플리케이션 컨테이너화
 
 Kubernetes에서 애플리케이션을 실행하려면 먼저 각 서비스를 Docker 이미지로 만들어야 합니다. Minikube 내부의 Docker 데몬을 사용하여 이미지를 빌드하면, 별도의 이미지 레지스트리 없이 Minikube 클러스터에서 바로 이미지를 사용할 수 있습니다.
