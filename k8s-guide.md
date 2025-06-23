@@ -178,3 +178,32 @@ Kubernetes 배포에서는 `.env` 파일을 사용하지 않습니다. 대신, `
     minikube service frontend
     minikube service backend-ui
     ```
+
+---
+
+## 로컬 환경에서 서비스 직접 접속 (Port Forwarding)
+
+`ClusterIP` 타입의 서비스는 기본적으로 클러스터 외부로 노출되지 않습니다. `kubectl port-forward` 명령을 사용하면 로컬 머신의 포트를 클러스터 내부 서비스의 포트로 직접 전달하여 임시로 접근할 수 있습니다. 이 방법은 디버깅이나 빠른 테스트에 매우 유용합니다.
+
+- **백엔드 서비스 접속:**
+  ```bash
+  # 새 터미널을 열고 실행
+  kubectl port-forward service/backend 8000:8000
+  ```
+  이제 브라우저나 API 클라이언트에서 `http://localhost:8000/api/` 와 같이 백엔드 API에 직접 접근할 수 있습니다.
+
+- **백엔드 UI 서비스 접속:**
+  ```bash
+  # 새 터미널을 열고 실행
+  kubectl port-forward service/backend-ui 3001:3001
+  ```
+  이제 브라우저에서 `http://localhost:3001` 주소로 백엔드 UI에 접속할 수 있습니다.
+
+- **프론트엔드 서비스 접속:**
+  ```bash
+  # 새 터미널을 열고 실행
+  kubectl port-forward service/frontend 8501:8501
+  ```
+  이제 브라우저에서 `http://localhost:8501` 주소로 프론트엔드 챗봇 UI에 접속할 수 있습니다.
+
+> **참고:** `port-forward` 명령은 실행 중인 터미널 세션에서만 활성화됩니다. 접속 테스트가 끝나면 터미널에서 `Ctrl+C`를 눌러 종료할 수 있습니다.
