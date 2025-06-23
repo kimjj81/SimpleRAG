@@ -16,7 +16,7 @@ def get_document_loader(file_path):
 
     if file_extension == ".pdf":
         return PyPDFLoader(file_path)
-    elif file_extension == ".txt":
+    elif file_extension == ".txt" or file_extension == ".md":
         return TextLoader(file_path)
     elif file_extension == ".docx":
         return Docx2txtLoader(file_path)
@@ -41,6 +41,7 @@ def get_opensearch_vector_store():
         opensearch_url=opensearch_url,
         index_name="rag-index",
         embedding_function=embeddings,
+        engine="lucene",  # Changed from deprecated nmslib to lucene
         http_auth=("admin", os.environ.get("OPENSEARCH_INITIAL_ADMIN_PASSWORD")),
         use_ssl=True,
         verify_certs=False,
