@@ -22,7 +22,7 @@ spec:
           service:
             name: backend-ui
             port:
-              number: 3001
+              number: 3000
       - path: /()(.*)
         pathType: ImplementationSpecific
         backend:
