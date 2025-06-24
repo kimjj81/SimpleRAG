@@ -13,6 +13,7 @@ from django.conf import settings
 from langchain_openai import ChatOpenAI
 from langchain.chains import ConversationalRetrievalChain
 from langchain_community.callbacks.manager import get_openai_callback
+from django.db.models import Count
 
 class FileUploadView(APIView):
     parser_classes = (MultiPartParser, FormParser)
@@ -39,7 +40,9 @@ class FileUploadView(APIView):
         return Response({"status": "success"}, status=status.HTTP_201_CREATED)
 
 class ChatSessionListCreateView(generics.ListCreateAPIView):
-    queryset = ChatSession.objects.all()
+    queryset = ChatSession.objects.all().select_related('user').annotate(
+        message_count=Count('messages')
+    ).order_by('-created_at')
     serializer_class = ChatSessionSerializer
 
 class ChatSessionDetailView(generics.RetrieveUpdateDestroyAPIView):
@@ -47,8 +50,15 @@ class ChatSessionDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = ChatSessionSerializer
 
 class ChatMessageListCreateView(generics.ListCreateAPIView):
-    queryset = ChatMessage.objects.all()
+    queryset = ChatMessage.objects.all().select_related('session', 'session__user').order_by('-created_at')
     serializer_class = ChatMessageSerializer
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        session_id = self.request.query_params.get('session', None)
+        if session_id is not None:
+            queryset = queryset.filter(session_id=session_id)
+        return queryset
 
     def perform_create(self, serializer):
         session = serializer.validated_data['session']
@@ -78,10 +88,18 @@ class ChatMessageListCreateView(generics.ListCreateAPIView):
             output_tokens=cb.completion_tokens
         )
 
+class ChatMessageDetailView(generics.RetrieveUpdateDestroyAPIView):
+    queryset = ChatMessage.objects.all()
+    serializer_class = ChatMessageSerializer
+
 class UserListView(generics.ListAPIView):
-    queryset = User.objects.all()
+    queryset = User.objects.all().order_by('-date_joined')
     serializer_class = UserSerializer
 
 class FileListView(generics.ListAPIView):
+    queryset = File.objects.all().order_by('-uploaded_at')
+    serializer_class = FileSerializer
+
+class FileDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = File.objects.all()
     serializer_class = FileSerializer
